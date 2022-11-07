@@ -1,0 +1,23 @@
+{
+  "name": "product_qr_generator",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev":"grunt build:dev",
+    "prod":"grunt build:prod",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Mohit Raj",
+  "license": "ISC",
+  "devDependencies": {
+    "grunt": "^1.5.3",
+    "grunt-contrib-clean": "^2.0.1",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-contrib-cssmin": "^4.0.0",
+    "grunt-inline": "^0.3.7",
+    "grunt-terser": "^2.0.0",
+    "terser": "^5.15.1"
+  },
+  "dependencies": {}
+}
