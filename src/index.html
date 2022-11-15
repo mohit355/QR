@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="./css/styles.css">
     <script src="./libs/qrcode.min.js" defer ></script>
     <script type="text/javascript"  href="./libs/bootstrap/js/bootstrap.min.js" defer> </script>
-    <script src="./libs/domToImage.min.js" defer></script>
+    <script src="./libs/domToImage.min.js////" defer></script>
     <script src="./index.js" defer></script>
 
 </head>
@@ -78,20 +78,14 @@
             <div class="col-8 border-start border-bottom border-top border-dark p-5 rounded-start">
                 <div class="mb-3"> 
                     <div class="row mt-1">
-                                <div class="col-3 my-auto">
-                                    QR Code Position:
-                                </div>
-                                <div class="col-9">
-                                    <select name="qrCodePosition" id="qrCodePosition" class="form-control" onChange="handleQRCodePositionChange(event)" >
-                                        <option value="bottomLeft">Left Bottom</option>
-                                        <option value="topLeft">Left Top</option>
-                                        <option value="bottomRight">Right Bottom</option>
-                                        <option value="topRight">Right Top</option>
-                                    </select>
-                                </div>
                     </div>
                 </div>
-                <div id="preview" class="" ondragover="onDragOver(event);" ondrop="onDrop(event);"></div>
+                <div id="preview" class="" ondragover="onDragOver(event);" ondrop="onDrop(event);">
+                
+                <div draggable="true" ondragstart="onDragStart(event);" id="draggedQRCode">
+                    <img src="" height="100%" width="100%" />
+                </div>
+                </div>
                 <div class="uploadOuter p-3 row">
                     <span class="dragBox" >
                         Drag and Drop Packaging Image here

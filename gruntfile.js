@@ -46,7 +46,6 @@ module.exports = function (grunt) {
           {
             src: '<%= dirs.output %>/prod/index.js',
             dest: '<%= dirs.output %>/prod/index.js',
-            ext: '.js',
           },
         ],
       },

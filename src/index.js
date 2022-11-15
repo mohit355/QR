@@ -1,5 +1,10 @@
 let textMessage=""
 let productFileName=""
+let firstDrop=false;
+let pageX=0;
+let pageY=0;
+let qrCodeDim=100;
+
 
 const onLinkClick=(event)=> {
   document.getElementById("linkWhatsapp").style.display="none";
@@ -39,7 +44,6 @@ const onClickGenerateQR= async(event)=>{
 
   const activeTab=document.getElementsByClassName("active")[0].innerText.trim()
 
-  // let generated=false;
   let text=""
   const errorField=document.getElementById("errorMsg");
   if(activeTab==="link"){
@@ -127,6 +131,7 @@ const handleAttachQRCodeClick=(event)=>{
     const qrCodeSrc=document.getElementById("qrCode").getAttribute("src");
     const qrCodeDivTitle=document.getElementById("qrCodeDiv").getAttribute("title");
     document.getElementById("addQrOnProduct").style="";
+    document.getElementById("draggedQRCode").style.display="none";
     document.getElementById("addQrOnProduct").classList.remove("d-none");
     document.getElementById("createQrCode").classList.add("d-none");
     document.getElementById("draggableQrCode").setAttribute("src",qrCodeSrc)
@@ -135,9 +140,15 @@ const handleAttachQRCodeClick=(event)=>{
 }
 
 const handleCreateNewQRClick=(event)=>{
-    document.getElementById("preview").innerHTML=''
+    const previewDiv=document.getElementById("preview");
+    if(previewDiv.children.length>=2){
+      previewDiv.children[0].remove()
+    }
     document.getElementById("qrCodeDiv").innerHTML=''
-    document.getElementById("qrCodePosition").selectedIndex=0;
+    firstDrop=false;
+    textMessage=""
+    productFileName=""
+    qrCodeDim=100;
     document.getElementById("preview").style="";
     document.getElementById("uploadFile").value=''
     document.getElementById("productNaturalImage").setAttribute("src","")
@@ -164,18 +175,16 @@ const dragNdrop=(event)=> {
     previewImg.setAttribute("id","productImage")
     previewImg.style.width="100%"
     document.getElementsByClassName("dragBox")[0].classList.add("packImgUploaded")
-    document.getElementById("draggableQrCode").setAttribute("draggable",true);
+    if(!firstDrop){
+      document.getElementById("draggableQrCode").setAttribute("draggable",true);
+    }
     document.getElementById("downloadMergeImagePng").removeAttribute("disabled")
     document.getElementById("downloadMergeImageSvg").removeAttribute("disabled")
-    if(preview.children.length>1){
+    if(preview.children.length>=2){
       preview.children[0].remove()
       preview.height="auto"
-      document.getElementById("draggableQrCode").setAttribute("draggable",false);
       document.getElementById("draggedQRCode").removeAttribute("top")
       document.getElementById("draggedQRCode").removeAttribute("right")
-    }
-    else{
-      preview.innerHTML = "";
     }
     preview.insertBefore(previewImg, preview.firstChild);
 
@@ -196,9 +205,6 @@ const drop=()=> {
 }
 
 const onDragStart=(event)=> {
-  event
-    .dataTransfer
-    .setData('qrCodeDrag', event.target.id);
 }
 
 const onDragOver=(event)=> {
@@ -206,43 +212,41 @@ const onDragOver=(event)=> {
 }
 
 const onDrop=(event)=> {
-  const id = event
-    .dataTransfer
-    .getData('qrCodeDrag');
-    const qrCodeDim=100;
-    const draggableElement = document.getElementById(id);
+    document.getElementById("draggedQRCode").style.display="inline";
+    const draggableElementImgSrc = document.getElementById("draggableQrCode").src;
+    const draggableElement= document.getElementById("draggedQRCode")
     const qrTitle=document.getElementById("draggableContainer").title;
-    draggableElement.height=qrCodeDim;
-    draggableElement.width=qrCodeDim;
-    draggableElement.style.position="relative"
-    draggableElement.setAttribute("id","draggedQRCode")
+    let productImage=document.getElementById("productImage");
+    const scaleX=productImage.offsetWidth/productImage.naturalWidth
+    const scaleY=productImage.offsetHeight/productImage.naturalHeight
+    if(firstDrop===true){
+      const offsetHeight=draggableElement.offsetHeight
+      const offsetWidth=draggableElement.offsetWidth
+      qrCodeDim=(offsetHeight+offsetWidth)/2
+      document.getElementById("draggableQrCode").setAttribute("draggable","false")
+    }
+
+    draggableElement.style.height=qrCodeDim+"px"
+    draggableElement.style.width=qrCodeDim+"px"
+    draggableElement.style.position="absolute"
+    draggableElement.children[0].src=draggableElementImgSrc;
     draggableElement.setAttribute("title",qrTitle);
     const dropzone = document.getElementById("preview");
-    const parentImgHeight=dropzone.children[0].height;
+    pageX=event.pageX
+    pageY=event.pageY
     setQRPosition(draggableElement)
     dropzone.appendChild(draggableElement);
-    var previewImg = document.createElement("img");
-    previewImg.setAttribute("src", draggableElement.src);
-    previewImg.setAttribute("height", "300");
-    previewImg.setAttribute("width", "300");
-    previewImg.setAttribute("draggable", false);
-    previewImg.setAttribute("id", "draggableQrCode");
-    previewImg.setAttribute("ondragstart", "onDragStart(event);");
-    previewImg.classList.add("mx-auto")
-    previewImg.classList.add("d-block")
-    document.getElementById("draggableContainer").appendChild(previewImg)
+    document.getElementById("draggableQrCode").setAttribute("draggable",false);
+
+    firstDrop=true;
     event
     .dataTransfer
     .clearData();
-    dropzone.style.marginBottom="-"+qrCodeDim+"px"
     
 }
 
-const setQRPosition=(draggableElement, isMergedImage,qrCodeDim=100,aspectRatio)=>{
-
-  var e = document.getElementById("qrCodePosition");
-  var value = e.value;
-  let padding=10;
+const setQRPosition=(draggableElement, isMergedImage,aspectRatio)=>{
+  let padding=0;
   if(isMergedImage){
     padding=padding/aspectRatio
   }
@@ -261,27 +265,11 @@ const setQRPosition=(draggableElement, isMergedImage,qrCodeDim=100,aspectRatio)=
   }
 
   if(draggedQR){
-    draggedQR.setAttribute("style","position:relative")
-    switch (value) {
-      case "topLeft":
-        draggedQR.style.top=-(parentImgHeight)+padding +"px";
-        draggedQR.style.right=(parentImgWidth/2)-(qrCodeDim/2)-padding+"px";
-        return;
-      case "bottomLeft":
-        draggedQR.style.top=-(qrCodeDim+padding) +"px";
-      draggedQR.style.right=(parentImgWidth/2)-(qrCodeDim/2)-padding+"px";
-        return;
-      case "bottomRight":
-          draggedQR.style.top=-(qrCodeDim+padding) +"px";
-          draggedQR.style.right=-((parentImgWidth/2)-(qrCodeDim/2))+padding+"px";
-        return;
-      case "topRight":
-        draggedQR.style.top=-(parentImgHeight)+padding +"px";
-        draggedQR.style.right=-((parentImgWidth/2)-(qrCodeDim/2))+padding+"px";
-        return;
+    if(pageX && pageY){
+      draggedQR.style.top=pageY-(qrCodeDim/2)+"px";
+      draggedQR.style.left=pageX-(qrCodeDim/2)+"px";
     }
   }
-  
 }
 
 const handleQRCodePositionChange=(event)=>{
@@ -308,19 +296,30 @@ const handleMergedImageDownload=(event,fileType)=>{
 
 const downloadMergedImage=(fileType)=>{
   var mergedImage= document.getElementById("preview")
-    // mergedImage.setAttribute("style",`height:${mergedImage.children[0].height}px`)
     mergedImage= document.getElementById("preview")
 
     let productImage=document.getElementById("productImage");
     let draggedQRCode=document.getElementById("draggedQRCode");
+    var parentPos = productImage.getBoundingClientRect();
+    var childPos = draggedQRCode.getBoundingClientRect();
+    const relativePos = {};
+    relativePos.top = childPos.top - parentPos.top;
+    relativePos.right = childPos.right - parentPos.right;
+    relativePos.bottom = childPos.bottom - parentPos.bottom;
+    relativePos.left = childPos.left - parentPos.left;
+    relativePos.x = childPos.x - parentPos.x;
+    relativePos.y = childPos.y - parentPos.y;
+
+
 
     // create original size image
     let productNaturalImage=document.getElementById("productNaturalImage");
+    let hiddenNaturalDiv=document.getElementById("hiddenNaturalDiv");
     let naturalPreviewImage=document.getElementById("naturalPreviewImage");
     productNaturalImage.setAttribute("src",productImage.getAttribute("src"));
     productNaturalImage.setAttribute("height",productImage.naturalHeight)
     productNaturalImage.setAttribute("width",productImage.naturalWidth)
-    naturalPreviewImage.setAttribute("style",`height:${productImage.naturalHeight}px; width:${productImage.naturalWidth}px`)
+    naturalPreviewImage.setAttribute("style",`height:${productImage.naturalHeight}px; width:${productImage.naturalWidth}px; position:absolute`)
     const scaleX=productImage.offsetWidth/productImage.naturalWidth
     const scaleY=productImage.offsetHeight/productImage.naturalHeight
 
@@ -333,12 +332,19 @@ const downloadMergedImage=(fileType)=>{
       draggedNaturalQRCode=document.createElement("img")
       draggedNaturalQRCode.setAttribute("class","mx-auto d-block")
       draggedNaturalQRCode.setAttribute("id","draggedNaturalQRCode")
-      draggedNaturalQRCode.height=draggedQRCode.height/scaleY
-      draggedNaturalQRCode.width=draggedQRCode.width/scaleX
-      draggedNaturalQRCode.src=draggedQRCode.src
+      const qrCodeDimension=((draggedQRCode.offsetHeight/scaleY)+(draggedQRCode.offsetWidth/scaleX))/2;
+      draggedNaturalQRCode.height=qrCodeDimension
+      draggedNaturalQRCode.width=qrCodeDimension
+      draggedNaturalQRCode.src=draggedQRCode.children[0].src
+      draggedNaturalQRCode.setAttribute("style",`position:absolute; bottom: ${-1*(relativePos.bottom)/scaleY}px; left:${(relativePos.left)/scaleX}px`)
       naturalPreviewImage.appendChild(draggedNaturalQRCode);
-        setQRPosition(undefined,true,draggedNaturalQRCode.height,scaleX);
+      const parentImgWidth=productNaturalImage.width;
+      const parentImgHeight=productNaturalImage.height;
+      console.log("SCALES ", scaleX, scaleY);
+
+
     }
+
     
     mergedImage=document.getElementById("naturalPreviewImage");
     if(fileType==="svg"){
