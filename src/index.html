@@ -6,11 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Product QR generator</title>
     <link rel="stylesheet" type="text/css" href="./libs/bootstrap/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="./css/styles.css">
     <script src="./libs/qrcode.min.js" defer ></script>
     <script type="text/javascript"  href="./libs/bootstrap/js/bootstrap.min.js" defer> </script>
-    <script src="./libs/domToImage.min.js////" defer></script>
-    <script src="./index.js" defer></script>
+    <link rel="stylesheet" href="./css/base.css">
+    <link rel="stylesheet" href="./css/app.css">
+    <!-- @import qrConfigs.js -->
+    <script src="./libs/domToImage.min.js" defer></script>
+    <script type="text/javascript" src="./index.js" defer></script>
+    <script type="module" src="./libs/requireJs.js" defer></script>
 
 </head>
 <body class="p-5">
@@ -82,8 +85,11 @@
                 </div>
                 <div id="preview" class="" ondragover="onDragOver(event);" ondrop="onDrop(event);">
                 
-                <div draggable="true" ondragstart="onDragStart(event);" id="draggedQRCode">
-                    <img src="" height="100%" width="100%" />
+                <div draggable="" ondragstart="onDragStart(event);" id="draggedQRCode">
+                    <img src="" height="100%" width="100%" id="draggedQRCodeImg" />
+                        <div id="resizer" class='bottom-right' onmousedown="resizeMouseDown(event)">
+                            <img src="./assets/resize.svg" alt="link" srcset="">
+                        </div>
                 </div>
                 </div>
                 <div class="uploadOuter p-3 row">

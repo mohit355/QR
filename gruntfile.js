@@ -28,7 +28,8 @@ module.exports = function (grunt) {
             },
             generic: {
                 files: {
-                    '<%= dirs.output %>/prod/css/styles.css': '<%= dirs.output %>/prod/css/styles.css',
+                    '<%= dirs.output %>/prod/css/base.css': '<%= dirs.output %>/prod/css/base.css',
+                    '<%= dirs.output %>/prod/css/app.css': '<%= dirs.output %>/prod/css/app.css'
                 }
             },
         },
@@ -46,6 +47,10 @@ module.exports = function (grunt) {
           {
             src: '<%= dirs.output %>/prod/index.js',
             dest: '<%= dirs.output %>/prod/index.js',
+          },
+          {
+            src: '<%= dirs.output %>/prod/qrConfigs.js',
+            dest: '<%= dirs.output %>/prod/qrConfigs.js',
           },
         ],
       },
@@ -71,10 +76,38 @@ module.exports = function (grunt) {
         dest: '<%= dirs.output %>/prod/index.html'
       }
     },
-
+    'string-replace':{
+      html: {
+                files: {
+                    '<%= dirs.output %>/prod/index.html': '<%= dirs.output %>/prod/index.html'
+                },
+                options: {
+                    replacements: [{
+                        pattern: /<!-- @import qrConfigs.js -->/ig,
+                        replacement: '<script type="text/javascript" src="./qrConfigs.js" defer></script>'
+                    }]
+                }
+                
+            },
+      qrColors: {
+                files: {
+                  '<%= dirs.output %>/prod/index.js': '<%= dirs.output %>/prod/index.js'
+                },
+                options: {
+                    replacements: [{
+                        pattern: 'qrCodeColorDark="#000000"',
+                        replacement: 'qrCodeColorDark=qrCodeConfig.qrCode_dark_color'
+                    },
+                  {
+                        pattern: 'qrCodeColorLight = "#ffffff"',
+                        replacement: 'qrCodeColorLight=qrCodeConfig.qrCode_light_color'
+                    }]
+                }
+            },
+    },
     clean: {
       prod:['<%= dirs.output %>/prod'],
-      contents:['<%= dirs.output %>/prod/assets','<%= dirs.output %>/prod/css','<%= dirs.output %>/prod/libs','<%= dirs.output %>/prod/index.js','<%= dirs.output %>/prod/index.js.map'],
+      contents:['<%= dirs.output %>/prod/assets','<%= dirs.output %>/prod/qrConfigs.js','<%= dirs.output %>/prod/qrConfigs.js.map','<%= dirs.output %>/prod/css','<%= dirs.output %>/prod/libs','<%= dirs.output %>/prod/index.js','<%= dirs.output %>/prod/index.js.map'],
       dev:['<%= dirs.output %>/dev']
     }
     
@@ -85,6 +118,7 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-terser'); 
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-inline');
+  grunt.loadNpmTasks('grunt-string-replace');
   grunt.registerTask('build:dev', ['clean:dev','copy','clean:prod']);
-  grunt.registerTask('build:prod', ['clean:prod','copy:prod','cssmin','terser','inline','clean:contents','clean:dev']);
+  grunt.registerTask('build:prod', ['clean:prod','copy:prod','string-replace:html','string-replace:qrColors','cssmin','terser','inline','clean:contents','clean:dev']);
 };

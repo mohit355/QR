@@ -4,9 +4,15 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev":"grunt build:dev",
-    "prod":"grunt build:prod",
+    "dev": "grunt build:dev",
+    "prod": "grunt build:prod",
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "eslintConfig": {
+    "env": {
+      "browser": true,
+      "node": true
+    }
   },
   "author": "Mohit Raj",
   "license": "ISC",
@@ -16,8 +22,12 @@
     "grunt-contrib-copy": "^1.0.0",
     "grunt-contrib-cssmin": "^4.0.0",
     "grunt-inline": "^0.3.7",
+    "grunt-string-replace": "^1.3.3",
     "grunt-terser": "^2.0.0",
     "terser": "^5.15.1"
   },
-  "dependencies": {}
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "requirejs": "^2.3.5"
+  }
 }

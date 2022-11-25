@@ -1,9 +1,15 @@
+
 let textMessage=""
 let productFileName=""
 let firstDrop=false;
 let pageX=0;
 let pageY=0;
 let qrCodeDim=100;
+let isResizing=false;
+let qrCodeColorDark="#000000";
+let qrCodeColorLight = "#ffffff";
+
+
 
 
 const onLinkClick=(event)=> {
@@ -67,7 +73,7 @@ const onClickGenerateQR= async(event)=>{
     const whatsappMessage=document.getElementById("whatsappMsg").value+"";
 
     if(whatsappNumber.length>=1){
-      var regmm='^([0|+[0-9]{1,5})?([7-9][0-9]{9})$';
+      var regmm=`^([0|+[0-9]{1,5})?([7-9][0-9]{${countryCode==='+65'?7:9}})$`;
       var regmob = new RegExp(regmm);
       if(!regmob.test(whatsappNumber)){
         event.preventDefault();
@@ -108,8 +114,8 @@ const onClickGenerateQR= async(event)=>{
       text: text,
       width: 300,
       height: 300,
-      colorDark : "#000000",
-      colorLight : "#ffffff",
+      colorDark : qrCodeColorDark,
+      colorLight : qrCodeColorLight,
       correctLevel : QRCode.CorrectLevel.H,
     });
     if(qrcode){
@@ -163,39 +169,46 @@ const handleCreateNewQRClick=(event)=>{
     document.getElementsByClassName("dragBox")[0].classList.remove("packImgUploaded")
     document.getElementById("addQrOnProduct").classList.add("d-none");
     document.getElementById("createQrCode").classList.remove("d-none")
+    
 }
 
 const dragNdrop=(event)=> {
     var fileName = URL.createObjectURL(event.target.files[0]);
-    productFileName=event.target.files[0].name.split(".")[0];
-    var preview = document.getElementById("preview");
-    var previewImg = document.createElement("img");
-    previewImg.setAttribute("src", fileName);
-    previewImg.setAttribute("z-index","-100")
-    previewImg.setAttribute("id","productImage")
-    previewImg.style.width="100%"
-    document.getElementsByClassName("dragBox")[0].classList.add("packImgUploaded")
-    if(!firstDrop){
-      document.getElementById("draggableQrCode").setAttribute("draggable",true);
-    }
-    document.getElementById("downloadMergeImagePng").removeAttribute("disabled")
-    document.getElementById("downloadMergeImageSvg").removeAttribute("disabled")
-    if(preview.children.length>=2){
-      preview.children[0].remove()
-      preview.height="auto"
-      document.getElementById("draggedQRCode").removeAttribute("top")
-      document.getElementById("draggedQRCode").removeAttribute("right")
-    }
-    preview.insertBefore(previewImg, preview.firstChild);
+      productFileName=event.target.files[0].name.split(".")[0];
+      var preview = document.getElementById("preview");
+      var previewImg = document.createElement("img");
+      previewImg.setAttribute("src", fileName);
+      previewImg.setAttribute("z-index","-100")
+      previewImg.setAttribute("id","productImage")
+      previewImg.setAttribute("draggable","false")
+      previewImg.style.width="100%"
+      document.getElementsByClassName("dragBox")[0].classList.add("packImgUploaded")
+      if(!firstDrop){
+        document.getElementById("draggableQrCode").setAttribute("draggable",true);
+        
+      }
+      document.getElementById("downloadMergeImagePng").removeAttribute("disabled")
+      document.getElementById("downloadMergeImageSvg").removeAttribute("disabled")
+      if(preview.children.length>=2){
+        preview.children[0].remove()
+        preview.height="auto"
+        document.getElementById("draggedQRCode").removeAttribute("top")
+        document.getElementById("draggedQRCode").removeAttribute("right")
+      }
+      preview.insertBefore(previewImg, preview.firstChild);
 
-    setTimeout(() => {
-      setQRPosition();
-    }, 100);
+      setTimeout(() => {
+        if(firstDrop){
+        setQRPosition(null,firstDrop)
+      }
+      else{
+        setQRPosition()
+      }
+      }, 100);    
 
 }
 
-const drag=()=> {
-    document.getElementById('uploadFile').parentNode.className = 'draging dragBox';
+const drag=(event)=> {
 }
 
 const drop=()=> {
@@ -212,62 +225,65 @@ const onDragOver=(event)=> {
 }
 
 const onDrop=(event)=> {
-    document.getElementById("draggedQRCode").style.display="inline";
-    const draggableElementImgSrc = document.getElementById("draggableQrCode").src;
-    const draggableElement= document.getElementById("draggedQRCode")
-    const qrTitle=document.getElementById("draggableContainer").title;
-    let productImage=document.getElementById("productImage");
-    const scaleX=productImage.offsetWidth/productImage.naturalWidth
-    const scaleY=productImage.offsetHeight/productImage.naturalHeight
-    if(firstDrop===true){
-      const offsetHeight=draggableElement.offsetHeight
-      const offsetWidth=draggableElement.offsetWidth
-      qrCodeDim=(offsetHeight+offsetWidth)/2
-      document.getElementById("draggableQrCode").setAttribute("draggable","false")
+    if(!isResizing){
+        document.getElementById("draggedQRCode").style.display="inline";
+      const draggableElementImgSrc = document.getElementById("draggableQrCode").src;
+      const draggableElement= document.getElementById("draggedQRCode")
+      const qrTitle=document.getElementById("draggableContainer").title;
+      let productImage=document.getElementById("productImage");
+      const scaleX=productImage.offsetWidth/productImage.naturalWidth
+      const scaleY=productImage.offsetHeight/productImage.naturalHeight
+      if(firstDrop===true){
+        const offsetHeight=draggableElement.offsetHeight
+        const offsetWidth=draggableElement.offsetWidth
+        qrCodeDim=(offsetHeight+offsetWidth)/2
+        document.getElementById("draggableQrCode").setAttribute("draggable","false")
+      }
+
+      draggableElement.style.height=qrCodeDim+"px"
+      draggableElement.style.width=qrCodeDim+"px"
+      draggableElement.style.position="absolute"
+      draggableElement.children[0].src=draggableElementImgSrc;
+      draggableElement.setAttribute("title",qrTitle);
+      const dropzone = document.getElementById("preview");
+      pageX=event.pageX
+      pageY=event.pageY
+      setQRPosition(draggableElement)
+      dropzone.appendChild(draggableElement);
+      document.getElementById("draggableQrCode").setAttribute("draggable",false);
+
+      firstDrop=true;
+      event
+      .dataTransfer
+      .clearData();
     }
-
-    draggableElement.style.height=qrCodeDim+"px"
-    draggableElement.style.width=qrCodeDim+"px"
-    draggableElement.style.position="absolute"
-    draggableElement.children[0].src=draggableElementImgSrc;
-    draggableElement.setAttribute("title",qrTitle);
-    const dropzone = document.getElementById("preview");
-    pageX=event.pageX
-    pageY=event.pageY
-    setQRPosition(draggableElement)
-    dropzone.appendChild(draggableElement);
-    document.getElementById("draggableQrCode").setAttribute("draggable",false);
-
-    firstDrop=true;
-    event
-    .dataTransfer
-    .clearData();
+    else{
+        document.getElementById("draggedQRCode").setAttribute("draggable","false");
+    }
     
 }
 
-const setQRPosition=(draggableElement, isMergedImage,aspectRatio)=>{
-  let padding=0;
-  if(isMergedImage){
-    padding=padding/aspectRatio
-  }
-  let dropzone = document.getElementById("preview");
-  if(isMergedImage){
-    dropzone=document.getElementById("naturalPreviewImage");
-  }
-  const parentImgWidth=dropzone.children[0].width;
-  const parentImgHeight=dropzone.children[0].height;
+const setQRPosition=(draggableElement, isImageChange)=>{
   let draggedQR= document.getElementById("draggedQRCode");
   if(draggableElement){
     draggedQR=draggableElement
   }
-  if(isMergedImage){
-    draggedQR=document.getElementById("draggedNaturalQRCode");
-  }
 
   if(draggedQR){
     if(pageX && pageY){
-      draggedQR.style.top=pageY-(qrCodeDim/2)+"px";
-      draggedQR.style.left=pageX-(qrCodeDim/2)+"px";
+      if(isImageChange){
+        draggedQR.style.removeProperty("top")
+        const productImage=document.getElementById("productImage").getBoundingClientRect();
+        draggedQR.style.left=productImage.left+"px";
+        draggedQR.style.height="100px";
+        draggedQR.style.width="100px";
+
+      }
+      else{
+        draggedQR.style.top=pageY-(qrCodeDim/2)+"px";
+        draggedQR.style.left=pageX-(qrCodeDim/2)+"px";
+      }
+      
     }
   }
 }
@@ -323,7 +339,7 @@ const downloadMergedImage=(fileType)=>{
     const scaleX=productImage.offsetWidth/productImage.naturalWidth
     const scaleY=productImage.offsetHeight/productImage.naturalHeight
 
-    if(draggedQRCode){
+    if(document.getElementById('draggedQRCodeImg').getAttribute('src')!==''){
       let draggedNaturalQRCode=document.getElementById("draggedNaturalQRCode");
 
       if(draggedNaturalQRCode){
@@ -385,4 +401,34 @@ const handleDownloadQR= async (event,fileType, containerId)=>{
     })
   }
 
+}
+
+const resizeMouseDown=(event)=>{
+  isResizing=true;
+  document.getElementById("draggedQRCode").setAttribute("draggable","false");
+  let prevX=event.clientX;
+  let prevY=event.clientY;
+
+  const handleResizeMouseMove=(event)=>{
+    event.preventDefault();
+    const resizableQr=document.getElementById("draggedQRCode");
+    const rect=resizableQr.getBoundingClientRect()
+      const width=rect.width-(prevX-event.clientX);
+      const height=rect.height-(prevY-event.clientY);
+      const dimension=width>height?height:width;
+      resizableQr.style.width=dimension+"px";
+      resizableQr.style.height=dimension+"px";
+      prevX=event.clientX;
+      prevY=event.clientY;
+  }
+
+  const handleResizeMouseUp=(event)=>{
+    window.removeEventListener('mousemove',handleResizeMouseMove)
+    window.removeEventListener('mouseup',handleResizeMouseUp)
+    isResizing=false;
+    document.getElementById("draggedQRCode").setAttribute("draggable","true");
+  }
+
+  window.addEventListener('mousemove', handleResizeMouseMove)
+  window.addEventListener('mouseup', handleResizeMouseUp)
 }
