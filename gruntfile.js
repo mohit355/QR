@@ -120,5 +120,6 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-inline');
   grunt.loadNpmTasks('grunt-string-replace');
   grunt.registerTask('build:dev', ['clean:dev','copy','clean:prod']);
+  grunt.registerTask('build', ['clean:dev','copy','clean:prod']);
   grunt.registerTask('build:prod', ['clean:prod','copy:prod','string-replace:html','string-replace:qrColors','cssmin','terser','inline','clean:contents','clean:dev']);
 };
