@@ -1,0 +1,125 @@
+body {
+    background-color: var(--body-background);
+    box-sizing: border-box;
+}
+
+li{
+    text-decoration: none;
+    list-style: none;
+    padding: 10px 10px;
+    width: 120px;
+    text-align: center;
+    background-color: #e9ebee;
+}
+
+
+li:hover{
+    cursor: pointer;
+}
+
+.btn {
+    color: var(--button-color) !important;
+    background-color: var(--button-bg-color) !important;
+    border: 1px solid var(--button-border-color);
+}
+
+.btn:hover{
+    color: var(--button-hover-color) !important;
+    background-color: var(--button-hover-bg) !important;
+    border-color: var(--button-hover-border-color) !important;
+}
+
+.active{
+    background-color: white;
+    color: black;
+    border: 1px solid white;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+#formContainer{
+    background-color: white;
+    padding: 20px;
+}
+
+
+#draggableQrCode, #draggedQRCode{
+    cursor: grab;
+}
+#draggedQRCode{
+    z-index: 100;
+}
+
+
+.dragBox {
+    height: 20em;
+    margin: 0 auto;
+    position: relative;
+    font-weight: bold;
+    line-height: 95px;
+    color: #999;
+    border: 2px dashed #ccc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s;
+}
+
+
+.packImgUploaded{
+    height: 50px;
+}
+
+.dragBox input[type="file"] {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+    top: 0;
+    left: 0;
+}
+
+.draging {
+    transform: scale(1.1);
+}
+
+textarea{
+    resize: none;
+}
+
+#hiddenNaturalDiv{
+    height: 0px; 
+    width:0px; 
+    overflow:hidden;
+    position: absolute;
+}
+
+#preview{
+    text-align: center;
+}
+
+
+#draggedQRCode{
+    overflow: auto;
+    display: none;
+    overflow: hidden;
+}
+
+#resizer{
+    position: absolute;
+    right: -18px;
+    bottom: -13px;
+    transform: rotate(180deg);
+    overflow: hidden;
+}
+
+#resizer img{
+    height: 30px;
+    width: 30px;
+}
+
+.bottom-right {
+  right: 0px;
+  bottom: 0px;
+  cursor: nwse-resize;
+}
