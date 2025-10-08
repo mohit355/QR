@@ -90,18 +90,3 @@ Submissions are open during October.
 PRs labeled as “hacktoberfest-accepted” will count toward your progress.
 
 Please make meaningful contributions — spam PRs will be reported to maintainers.
-
-💬 Need Help?
-
-If you get stuck:
-
-Check the Issues tab for guidance.
-
-Start a discussion in the Discussions tab.
-
-You can also mention maintainers for help.
-
-❤️ Thank You!
-
-Your contributions make open source awesome.
-Happy coding, and have a fantastic Hacktoberfest 2025! ✨
