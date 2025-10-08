@@ -1,5 +1,4 @@
-# QR
-QR Code Generator
+# QR Generator
 
 A lightweight, fast, and easy-to-use QR Code Generator built with HTML, CSS, and JavaScript.
 Easily generate QR codes for URLs, text, contact info, or any custom data — right in your browser.
@@ -28,8 +27,7 @@ CSS3 – Styling (responsive design)
 JavaScript (ES6) – Logic and QR code generation
 
 qrcodejs
- or qr-code-styling
- – Library (optional)
+ or qr-code-stylin
 
  ⚙️ Installation & Setup
 
