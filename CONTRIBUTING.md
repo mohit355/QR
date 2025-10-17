@@ -1,13 +1,11 @@
-# 🎉 Welcome to the QR Code Generator Project!
+# 🎉 Welcome to the QR Code Generator Project
 
 We’re excited that you’re interested in contributing — especially as part of **Hacktoberfest**! 💻🌍  
 Every contribution — whether it’s fixing bugs, improving docs, adding new features, or enhancing the UI — helps make this project better for everyone.
 
 ---
 
-## 🎯 Our Goal
-
-This project provides a **simple, open-source QR Code Generator** for the web.  
+nerator** for the web.  
 We’re participating in **Hacktoberfest**, so all **valid Pull Requests (PRs)** opened during **October** will count toward your Hacktoberfest progress!
 
 ---
