@@ -4,7 +4,6 @@ A lightweight, fast, and browser-based QR Code Generator built with HTML, CSS, a
 Generate QR codes instantly for URLs, text, contact info, or any custom data — no server required.
 
 🚀 Featuresssss
-
 ⚡ Instant QR code generation
 
 🧩 Supports text, URLs, and custom data
