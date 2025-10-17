@@ -23,3 +23,5 @@ Click the **Fork** button (top-right corner of this page) to create your own cop
 ```bash
 git clone https://github.com/<your-username>/qr-code-generator.git
 cd qr-code-generator
+
+will be done in sometime
