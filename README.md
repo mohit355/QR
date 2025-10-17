@@ -1,62 +1,60 @@
-# QR Generator
+🌐 QR Generator
 
-A lightweight, fast, and easy-to-use QR Code Generator built with HTML, CSS, and JavaScript.
-Easily generate QR codes for URLs, text, contact info, or any custom data — right in your browser.
+A lightweight, fast, and browser-based QR Code Generator built with HTML, CSS, and JavaScript.
+Generate QR codes instantly for URLs, text, contact info, or any custom data — no server required.
 
 🚀 Features
 
-✅ Generate QR codes instantly
-✅ Support for text, URLs, and arbitrary data
-✅ Download QR codes as PNG or SVG
-✅ Responsive, mobile-friendly UI
-✅ 100% client-side — no backend required
-✅ Built with pure JavaScript (no frameworks)
+⚡ Instant QR code generation
 
-🖥️ Demo
+🧩 Supports text, URLs, and custom data
 
-👉 Live Demo
+💾 Download QR codes as PNG or SVG
 
-(Replace the link with your GitHub Pages / Vercel / Netlify URL)
+📱 Fully responsive, mobile-friendly UI
 
-🧩 Tech Stack
+🔒 100% client-side — no backend or API calls
 
-HTML5 – Structure
+🧠 Built with vanilla JavaScript (no frameworks)
 
-CSS3 – Styling (responsive design)
+🖥️ Live Demo
 
-JavaScript (ES6) – Logic and QR code generation
+👉 View Demo
 
-qrcodejs
- or qr-code-stylin
+(Replace the link above with your GitHub Pages / Vercel / Netlify deployment URL)
 
- ⚙️ Installation & Setup
+🧰 Tech Stack
+Layer	Technology
+Structure	HTML5
+Styling	CSS3 (responsive layout)
+Logic	JavaScript (ES6)
+Libraries	qrcodejs
+ / qr-code-styling
+⚙️ Installation & Setup
 
-Clone the repository:
+Clone the repository
 
 git clone https://github.com/yourusername/qr-code-generator.git
 cd qr-code-generator
 
 
 Open index.html directly in your browser
-(or serve locally using VS Code Live Server or any static server)
-
-Example:
+or serve locally (recommended):
 
 npx serve
 
 
-Then visit:
-👉 http://localhost:3000
+Then visit → http://localhost:3000
 
 🧠 Usage
 
-Enter your text or URL in the input box.
+Enter your text or URL in the input field.
 
 Click Generate QR Code.
 
 Download or share your QR code image.
 
-Example (using library in JS):
+Example using JavaScript:
 
 new QRCode(document.getElementById("qrcode"), {
   text: "https://example.com",
@@ -67,7 +65,7 @@ new QRCode(document.getElementById("qrcode"), {
   correctLevel: QRCode.CorrectLevel.H
 });
 
-🧩 Folder Structure
+📁 Folder Structure
 qr-code-generator/
 │
 ├── index.html
@@ -77,14 +75,13 @@ qr-code-generator/
 
 📸 Screenshot
 
-(Optional — add a screenshot of your UI)
+(Optional – add an image of your UI here)
 
-
-🧰 Contributing
+🤝 Contributing
 
 Contributions are welcome!
 
-Fork this repository
+Fork the repository
 
 Create a new branch:
 
@@ -96,17 +93,10 @@ Commit your changes and push:
 git push origin feature/your-feature-name
 
 
-Open a pull request 🎉
+Open a Pull Request 🎉
 
 🪪 License
 
 This project is licensed under the MIT License.
-See LICENSE
- for details.
-
-💡 Author
-
-👤 Your Name
-GitHub: @yourusername
-
-Twitter / LinkedIn / Website (optional)
+See the LICENSE
+ file for details.
